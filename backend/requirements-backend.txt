@@ -1,0 +1,9 @@
+Flask>=3.0
+flask-cors>=4.0
+python-dotenv>=1.0
+SQLAlchemy>=2.0
+PyMySQL>=1.1
+cryptography>=42
+imageio-ffmpeg>=0.5
+numpy
+opencv-python-headless

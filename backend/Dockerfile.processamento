@@ -1,0 +1,26 @@
+FROM python:3.11-slim
+
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+
+WORKDIR /app/backend
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libgl1 \
+    libglib2.0-0 \
+    libgomp1 \
+    libsm6 \
+    libxext6 \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY backend/requirements-processamento.txt .
+
+RUN pip install --no-cache-dir -r requirements-processamento.txt
+
+COPY backend/ /app/backend/
+
+ENV STORAGE_DIR=/app/backend/storage
+ENV MODELO_PESOS=/app/backend/modelos/detector_v1.pt
+ENV DISPOSITIVO=cpu
+
+CMD ["python", "worker.py"]

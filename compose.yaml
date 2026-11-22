@@ -1,0 +1,61 @@
+services:
+  db:
+    image: mysql:8.4
+    environment:
+      MYSQL_ROOT_PASSWORD: Vias2026
+      MYSQL_DATABASE: projeto_sinalizacoes
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -uroot -p$${MYSQL_ROOT_PASSWORD} --silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DB_URL: mysql+pymysql://root:Vias2026@db:3306/projeto_sinalizacoes
+      HOST: 0.0.0.0
+      PORTA: 8000
+      STORAGE_DIR: /app/backend/storage
+      MODELO_PESOS: /app/backend/modelos/detector_v1.pt
+      DISPOSITIVO: cpu
+    volumes:
+      - ./backend/storage:/app/backend/storage
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/api/saude')"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  python:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile.processamento
+    depends_on:
+      backend:
+        condition: service_healthy
+    environment:
+      DB_URL: mysql+pymysql://root:Vias2026@db:3306/projeto_sinalizacoes
+      STORAGE_DIR: /app/backend/storage
+      MODELO_PESOS: /app/backend/modelos/detector_v1.pt
+      DISPOSITIVO: cpu
+    volumes:
+      - ./backend/storage:/app/backend/storage
+
+  frontend:
+    build: ./frontend
+    depends_on:
+      backend:
+        condition: service_healthy
+    ports:
+      - "8080:80"
+
+volumes:
+  mysql_data:
