@@ -5,4 +5,5 @@ cryptography>=42
 imageio-ffmpeg>=0.5
 ultralytics>=8.4.0
 numpy
-opencv-python-headless
+opencv-python==4.13.0.92
+openvino
