@@ -726,7 +726,7 @@ Evite instalar simultaneamente `opencv-python` e `opencv-python-headless`, pois 
 | Larissa | — |
 | Vitória | [@VitoriaGabrieliSo](https://github.com/VitoriaGabrieliSo) |
 | Clara | [@claratarga](https://github.com/claratarga) |
-| Ana Clara | — |
+| Ana Clara |[ana-clara-souza](https://github.com/ana-clara-souza) |
 
 Front-end desenvolvido originalmente em [luizfelipeyg-crypto/frontend_monitoramento_vias](https://github.com/luizfelipeyg-crypto/frontend_monitoramento_vias).
 
